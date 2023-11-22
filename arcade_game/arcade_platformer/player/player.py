@@ -5,6 +5,9 @@ from arcade_game.arcade_platformer.config.config import PLAYER_START_X, PLAYER_S
 
 
 class Player:
+    """
+    Controls the player animations (images for the various positions) and movements
+    """
     def __init__(self):
         self.player = self.create_player_sprite()
         self.physics_engine = None

@@ -10,6 +10,11 @@ def speech_to_text_continuous(message_queue: Queue, api_key: str, speech_region:
     """
     Converts speech to text non-stop
     Documentation: https://learn.microsoft.com/en-gb/azure/ai-services/speech-service/how-to-recognize-speech?pivots=programming-language-python
+
+    This section will need some changes fo you to solve the challenges
+    This logic is called by spawning a sub-process from the main game view.
+    The main process and this speech recognition process communicate in a one-way manner using Queues.
+    The Speech recognition process can send message to the queue which can be then retrieved by the main process.
     """
     done = False
 

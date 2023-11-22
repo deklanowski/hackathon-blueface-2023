@@ -8,6 +8,9 @@ from arcade_game.arcade_platformer.player.player import Player
 class WinnerView(arcade.View):
     """
     Displays the Winner screen, with the ability to restart the game by pressing Enter
+
+    Displays a background image, play a sounds and wait for pressing the Enter key to start a new game.
+    You do not have to modify these to complete the mandatory challenges.
     """
 
     def __init__(self, player: Player) -> None:

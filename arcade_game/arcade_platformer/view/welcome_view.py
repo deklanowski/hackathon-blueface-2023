@@ -8,6 +8,9 @@ from arcade_game.arcade_platformer.player.player import Player
 class WelcomeView(arcade.View):
     """
     Displays a welcome screen and prompts the user to begin the game.
+
+    Displays a background image, play a sounds and wait for pressing the Enter key to start the game.
+    You do not have to modify these to complete the mandatory challenges.
     """
 
     def __init__(self, player: Player) -> None:
