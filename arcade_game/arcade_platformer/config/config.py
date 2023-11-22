@@ -1,6 +1,6 @@
 import pathlib
 
-""" FROZEN FILE ! Do not modify """
+""" This is the main constant for the game """
 
 # Game constants
 

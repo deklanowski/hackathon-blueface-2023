@@ -12,9 +12,9 @@ $ pip install -r requirements.txt
 ```
 ### Windows
 ```
-$ python3 -m venv venv
-$ source venv/bin/active
-$ pip install -r requirements.txt
+$ py -m venv venv
+$ source venv/Scripts/activate
+$ py -m pip install -r requirements.txt
 ```
 ## Set the Speech Recognition API keys in the .env file
 - copy the .env.sample file into .env

@@ -14,6 +14,9 @@ from . import game_over_view, winner_view
 
 
 class PlatformerView(arcade.View):
+    """
+    Displays the platform game view, where you can interact with the player
+    """
     def __init__(self, player: Player) -> None:
         """The init method runs only once when the game starts"""
         super().__init__()
