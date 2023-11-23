@@ -1,4 +1,6 @@
 import logging
+import threading
+import time
 from time import sleep
 from timeit import default_timer
 from multiprocessing import Process, Queue
@@ -165,6 +167,33 @@ class PlatformerView(arcade.View):
             "api_key": os.environ.get('SPEECH_API_KEY'),
             "speech_region": os.environ.get('SPEECH_REGION')}, name="T1")
         self.recognize_proc.start()
+        # Start voice command processing
+        command_thread = threading.Thread(target=self.execute_voice_command,
+                                          args=())
+        command_thread.start()
+
+    def execute_voice_command(self):
+        """
+        Processes voice command queue and executes matched commands.
+        """
+        while True:
+            if not self.message_queue.empty():
+                command = self.message_queue.get()
+                print(f"COMMAND: {command}")
+
+                if "right" in command:
+                    self.game_player.move_right()
+                elif "left" in command:
+                    self.game_player.move_left()
+                elif "up" in command:
+                    self.game_player.move_up()
+                elif "down" in command:
+                    self.game_player.move_down()
+                elif "jump" in command:
+                    self.game_player.jump()
+            else:
+                # avoid busy-waiting
+                time.sleep(0.5)
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""

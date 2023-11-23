@@ -25,11 +25,21 @@ def speech_to_text_continuous(message_queue: Queue, api_key: str, speech_region:
         done = True
 
     def recognized_speech(event: SpeechRecognitionEventArgs):
-        logger.info(f"Recognized: {event.result.text}")
-
-        if "Hello World" in event.result.text.lower():
-            logger.info("hello world")
-            message_queue.put("hello world")
+        """Callback fired when speech is recognized. Check the event and
+        place on queue"""
+        if event.result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            message_queue.put(event.result.text.lower())
+        elif event.result.reason == speechsdk.ResultReason.NoMatch:
+            print("No speech could be recognized: {}".format(
+                event.result.no_match_details))
+        elif event.result.reason == speechsdk.ResultReason.Canceled:
+            cancellation_details = event.result.cancellation_details
+            print("Speech Recognition canceled: {}".format(
+                cancellation_details.reason))
+            if cancellation_details.reason == speechsdk.CancellationReason.Error:
+                print("Error details: {}".format(
+                    cancellation_details.error_details))
+                print("Did you set the speech resource key and region values?")
 
     # Init engine
     speech_config = speechsdk.SpeechConfig(subscription=api_key, region=speech_region)
