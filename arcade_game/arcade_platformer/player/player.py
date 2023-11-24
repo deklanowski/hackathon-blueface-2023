@@ -12,7 +12,7 @@ class Player:
         self.player = self.create_player_sprite()
         self.physics_engine = None
         self.jump_sound = arcade.load_sound(
-            str(ASSETS_PATH / "sounds" / "abirdjump.mp3")
+            str(ASSETS_PATH / "sounds" / "abirdjump.wav")
         )
 
     def set_physics_engine(self, physics_engine: arcade.PhysicsEnginePlatformer):
@@ -91,6 +91,7 @@ class Player:
     def move_up(self):
         # Check if player can climb up or down
         if self.physics_engine.is_on_ladder():
+            #self.player.change_x = 0  # stop horizontal movement?
             self.player.change_y = PLAYER_MOVE_SPEED
             
 

@@ -1,19 +1,10 @@
-from msilib.schema import SelfReg
-from multiprocessing import Process, Queue
-import time
-from typing import Self
 import arcade
-import os
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from arcade_game.arcade_platformer.view.platform_view import PlatformerView
-# from arcade_game.arcade_platformer.view.cad import StartView
-from . import objective_view
-from . import start_view
-from . import platform_view
 from arcade_game.arcade_platformer.player.player import Player
-# from speech.speech_recognition import speech_to_text_startup
-from . import start_view
+# from arcade_game.arcade_platformer.view.cad import StartView
+from . import platform_view
+
 
 class CadView(arcade.View):
     """

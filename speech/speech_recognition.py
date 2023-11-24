@@ -47,7 +47,7 @@ def speech_to_text_continuous(message_queue: Queue, api_key: str, speech_region:
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
 
     # Define Callbacks
-    speech_recognizer.recognizing.connect(lambda evt: logger.info(f'RECOGNIZING: {evt.result.text}'))
+    #speech_recognizer.recognizing.connect(lambda evt: logger.info(f'RECOGNIZING: {evt.result.text}'))
     speech_recognizer.recognized.connect(recognized_speech)
 
     speech_recognizer.session_started.connect(lambda evt: logger.info(f'SESSION STARTED: {evt}'))

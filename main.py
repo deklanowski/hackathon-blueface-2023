@@ -2,15 +2,15 @@
 Blueface November 2023 - Hackathon Arcade Game
 """
 import os
-from typing import Self
-from dotenv import load_dotenv
 
 import arcade  # This is the main library our arcade game is built with
+from dotenv import load_dotenv
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 from arcade_game.arcade_platformer.player.player import Player
 from arcade_game.arcade_platformer.view import welcome_view
 from log.config_log import logger
+
 # from speech.speech_recognition import speech_to_text_startup
 
 if __name__ == "__main__":

@@ -1,17 +1,16 @@
-import logging
+import os
 import threading
-import time
+from multiprocessing import Process, Queue
 from time import sleep
 from timeit import default_timer
-from multiprocessing import Process, Queue
-import os
+
 import arcade
 
-from speech.speech_recognition import speech_to_text_continuous
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, TOTAL_LIFE_COUNT, ASSETS_PATH, \
     MAP_SCALING, PLAYER_START_X, PLAYER_START_Y, GRAVITY, LEFT_VIEWPORT_MARGIN, RIGHT_VIEWPORT_MARGIN, \
     TOP_VIEWPORT_MARGIN, BOTTOM_VIEWPORT_MARGIN, PLAYER_MOVE_SPEED, PLAYER_JUMP_SPEED
 from arcade_game.arcade_platformer.player.player import Player
+from speech.speech_recognition import speech_to_text_continuous
 from . import game_over_view, winner_view
 
 
@@ -19,6 +18,7 @@ class PlatformerView(arcade.View):
     """
     Displays the platform game view, where you can interact with the player
     """
+
     def __init__(self, player: Player) -> None:
         """The init method runs only once when the game starts"""
         super().__init__()
@@ -70,7 +70,7 @@ class PlatformerView(arcade.View):
             str(ASSETS_PATH / "sounds" / "coin.wav")
         )
         self.jump_sound = arcade.load_sound(
-            str(ASSETS_PATH / "sounds" / "abirdjump.mp3")
+            str(ASSETS_PATH / "sounds" / "abirdjump.wav")
         )
         self.level_victory_sound = arcade.load_sound(
             str(ASSETS_PATH / "sounds" / "level_victory.wav")
@@ -79,7 +79,7 @@ class PlatformerView(arcade.View):
             str(ASSETS_PATH / "sounds" / "death.wav")
         )
         self.run_background_sound = arcade.load_sound(
-            str(ASSETS_PATH / "sounds" / "backgroundsound.mp3")
+            str(ASSETS_PATH / "sounds" / "backgroundsound.wav")
         )
         # Init object for the process
         self.recognize_proc = None
@@ -294,21 +294,16 @@ class PlatformerView(arcade.View):
         # Check for player left or right movement
         if key in [arcade.key.LEFT, arcade.key.J]:  # Either left key or J key to go left
             self.player.change_x = -PLAYER_MOVE_SPEED
-            arcade.stop_sound(self.intro_sound)
-
         elif key in [arcade.key.RIGHT, arcade.key.L]:  # Either right key or L key to go right
             self.player.change_x = PLAYER_MOVE_SPEED
-            
 
         # Check if player can climb up or down
         elif key in [arcade.key.UP, arcade.key.I]:  # Either up key or I key to go up
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = PLAYER_MOVE_SPEED
-                
         elif key in [arcade.key.DOWN, arcade.key.K]:  # Either down key or K key to down
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = -PLAYER_MOVE_SPEED
-                
 
         # Check if player can jump
         elif key == arcade.key.SPACE:
@@ -342,22 +337,15 @@ class PlatformerView(arcade.View):
         ]:
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = 0
-                
 
-    
     def on_update(self, delta_time: float):
         """Updates the position of all game objects
 
         Arguments:
             delta_time {float} -- How much time since the last call
         """
-<<<<<<< Updated upstream
-
         self.execute_voice_command()
 
-=======
-        #If charachter moves play
->>>>>>> Stashed changes
         # Update the player animation
         self.player.update_animation(delta_time)
 
