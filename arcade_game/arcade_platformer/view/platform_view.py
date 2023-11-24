@@ -70,7 +70,7 @@ class PlatformerView(arcade.View):
             str(ASSETS_PATH / "sounds" / "coin.wav")
         )
         self.jump_sound = arcade.load_sound(
-            str(ASSETS_PATH / "sounds" / "jump.wav")
+            str(ASSETS_PATH / "sounds" / "abirdjump.mp3")
         )
         self.level_victory_sound = arcade.load_sound(
             str(ASSETS_PATH / "sounds" / "level_victory.wav")
@@ -78,7 +78,9 @@ class PlatformerView(arcade.View):
         self.death_sound = arcade.load_sound(
             str(ASSETS_PATH / "sounds" / "death.wav")
         )
-
+        self.run_background_sound = arcade.load_sound(
+            str(ASSETS_PATH / "sounds" / "backgroundsound.mp3")
+        )
         # Init object for the process
         self.recognize_proc = None
         self.message_queue = None
@@ -292,16 +294,21 @@ class PlatformerView(arcade.View):
         # Check for player left or right movement
         if key in [arcade.key.LEFT, arcade.key.J]:  # Either left key or J key to go left
             self.player.change_x = -PLAYER_MOVE_SPEED
+            arcade.stop_sound(self.intro_sound)
+
         elif key in [arcade.key.RIGHT, arcade.key.L]:  # Either right key or L key to go right
             self.player.change_x = PLAYER_MOVE_SPEED
+            
 
         # Check if player can climb up or down
         elif key in [arcade.key.UP, arcade.key.I]:  # Either up key or I key to go up
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = PLAYER_MOVE_SPEED
+                
         elif key in [arcade.key.DOWN, arcade.key.K]:  # Either down key or K key to down
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = -PLAYER_MOVE_SPEED
+                
 
         # Check if player can jump
         elif key == arcade.key.SPACE:
@@ -335,6 +342,8 @@ class PlatformerView(arcade.View):
         ]:
             if self.physics_engine.is_on_ladder():
                 self.player.change_y = 0
+                
+
     
     def on_update(self, delta_time: float):
         """Updates the position of all game objects
@@ -342,9 +351,13 @@ class PlatformerView(arcade.View):
         Arguments:
             delta_time {float} -- How much time since the last call
         """
+<<<<<<< Updated upstream
 
         self.execute_voice_command()
 
+=======
+        #If charachter moves play
+>>>>>>> Stashed changes
         # Update the player animation
         self.player.update_animation(delta_time)
 

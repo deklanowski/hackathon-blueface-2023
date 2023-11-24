@@ -2,6 +2,7 @@
 Blueface November 2023 - Hackathon Arcade Game
 """
 import os
+from typing import Self
 from dotenv import load_dotenv
 
 import arcade  # This is the main library our arcade game is built with
@@ -10,6 +11,7 @@ from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEI
 from arcade_game.arcade_platformer.player.player import Player
 from arcade_game.arcade_platformer.view import welcome_view
 from log.config_log import logger
+# from speech.speech_recognition import speech_to_text_startup
 
 if __name__ == "__main__":
 
@@ -30,11 +32,11 @@ if __name__ == "__main__":
 
     welcome_view = welcome_view.WelcomeView(global_player)
     window.show_view(welcome_view)
-
+ 
     arcade.run()
 
     # Closes the speech processor when the game is closed
     if welcome_view.game_view and welcome_view.game_view.recognize_proc:
         welcome_view.game_view.recognize_proc.terminate()
-
+        
     logger.info("Game closed")

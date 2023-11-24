@@ -1,9 +1,11 @@
+from multiprocessing import Process, Queue
+import time
 import arcade
-
+import os
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from . import platform_view
+from . import start_view
 from arcade_game.arcade_platformer.player.player import Player
-
+# from speech.speech_recognition import speech_to_text_startup
 
 class WelcomeView(arcade.View):
     """
@@ -22,21 +24,32 @@ class WelcomeView(arcade.View):
 
         # Load & play intro music
         self.intro_sound = arcade.load_sound(
-            str(ASSETS_PATH / "sounds" / "intro.wav")
+            str(ASSETS_PATH / "sounds" / "2050-Neon-Skies.wav")
         )
         self.sound_player = self.intro_sound.play(volume=0.3, loop=True)
 
         # Find the title image in the images folder
-        title_image_path = ASSETS_PATH / "images" / "welcome.png"
+        first_image_path = ASSETS_PATH / "images" / "all_is_calm.png"
 
         # Load our title image
-        self.title_image = arcade.load_texture(title_image_path)
+        self.first_image = arcade.load_texture(first_image_path)
 
         # Set our display timer
         self.display_timer = 2.0
+        # Set our display timer
+        self.switch_screen_timer = 0.0
 
         # Are we showing the instructions?
         self.show_instructions = False
+        
+        # Start the process for Speech Recognition
+        # self.message_queue = Queue()
+        # self.recognize_proc = Process(target=speech_to_text_startup, kwargs={
+        #     "message_queue": self.message_queue,
+        #     "api_key": os.environ.get('SPEECH_API_KEY'),
+        #     "speech_region": os.environ.get('SPEECH_REGION')}, name="Startup Speech")
+        # self.recognize_proc.start()
+
 
     def on_update(self, delta_time: float) -> None:
         """Manages the timer to toggle the instructions
@@ -47,7 +60,8 @@ class WelcomeView(arcade.View):
 
         # First, count down the time
         self.display_timer -= delta_time
-
+        self.switch_screen_timer += delta_time
+        
         # If the timer has run out, we toggle the instructions
         if self.display_timer < 0:
             # Toggle whether to show the instructions
@@ -55,6 +69,11 @@ class WelcomeView(arcade.View):
 
             # And reset the timer so the instructions flash slowly
             self.display_timer = 1.0
+
+        # If the timer has run out, we toggle the instructions
+        if self.switch_screen_timer > 4:
+            self.start_view = start_view.StartView(self.player)
+            self.window.show_view(self.start_view)
 
     def on_draw(self) -> None:
         # Start the rendering loop
@@ -66,30 +85,8 @@ class WelcomeView(arcade.View):
             center_y=SCREEN_HEIGHT / 2,
             width=SCREEN_WIDTH,
             height=SCREEN_HEIGHT,
-            texture=self.title_image,
+            texture=self.first_image,
         )
 
-        # Should we show our instructions?
-        if self.show_instructions:
-            arcade.draw_text(
-                "Press enter to Start the game",
-                start_x=250,
-                start_y=170,
-                color=arcade.color.SELECTIVE_YELLOW,
-                font_size=30,
-            )
 
-    def on_key_press(self, key: int, modifiers: int) -> None:
-        """Start the game when the user presses the enter key
 
-        Arguments:
-            key -- Which key was pressed
-            modifiers -- What modifiers were active
-        """
-        if key == arcade.key.RETURN:
-            # Stop intro music
-            self.intro_sound.stop(self.sound_player)
-            # Launch Game view
-            self.game_view = platform_view.PlatformerView(self.player)
-            self.game_view.setup()
-            self.window.show_view(self.game_view)
