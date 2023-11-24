@@ -7,8 +7,8 @@ from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEI
 from arcade_game.arcade_platformer.player.player import Player
 from . import start_view
 
+from speech.speech_recognition import speech_to_text_continuous
 
-from speech.speech_recognition import speech_to_text_startup
 
 class WelcomeView(arcade.View):
     """
@@ -48,10 +48,10 @@ class WelcomeView(arcade.View):
 
         # Start the process for Speech Recognition
         self.message_queue = Queue()
-        self.recognize_proc = Process(target=speech_to_text_startup, kwargs={
-             "message_queue": self.message_queue,
-             "api_key": os.environ.get('SPEECH_API_KEY'),
-             "speech_region": os.environ.get('SPEECH_REGION')}, name="Startup Speech")
+        self.recognize_proc = Process(target=speech_to_text_continuous, kwargs={
+            "message_queue": self.message_queue,
+            "api_key": os.environ.get('SPEECH_API_KEY'),
+            "speech_region": os.environ.get('SPEECH_REGION')}, name="Startup Speech")
         self.recognize_proc.start()
 
     def on_update(self, delta_time: float) -> None:
