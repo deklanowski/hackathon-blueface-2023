@@ -1,8 +1,9 @@
 import arcade
 
+
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from . import platform_view
 from arcade_game.arcade_platformer.player.player import Player
+from . import platform_view
 
 
 class WinnerView(arcade.View):

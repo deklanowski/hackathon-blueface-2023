@@ -125,6 +125,9 @@ class Player:
     def hold(self):
         self.player.change_y = 0
 
+    def freeze(self):
+        self.player.change_x = self.player.change_y = 0
+
     def jump(self):
         if self.physics_engine.can_jump():
             self.player.change_y = PLAYER_JUMP_SPEED
@@ -144,3 +147,4 @@ class Player:
             self.player.change_x = -PLAYER_MOVE_SPEED
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
+

@@ -2,7 +2,7 @@ import arcade
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
 from arcade_game.arcade_platformer.player.player import Player
-from . import cad_view
+from .cad_view import CadView
 from .media_player import MediaPlayer
 
 
@@ -56,5 +56,5 @@ class ObjectiveView(arcade.View):
 
         # If the timer has run out, we toggle the instructions
         if self.switch_screen_timer > 1:
-            self.start_view = cad_view.CadView(self.player, self.intro_player)
+            self.start_view = CadView(self.player, self.intro_player)
             self.window.show_view(self.start_view)

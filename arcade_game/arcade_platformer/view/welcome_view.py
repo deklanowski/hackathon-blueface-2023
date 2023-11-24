@@ -1,14 +1,13 @@
 import os
 from multiprocessing import Process, Queue
-
 import arcade
+
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
 from arcade_game.arcade_platformer.player.player import Player
-from . import start_view
-
-from speech.speech_recognition import speech_to_text_continuous
+from .start_view import StartView
 from .media_player import MediaPlayer
+from speech.speech_recognition import speech_to_text_continuous
 
 
 class WelcomeView(arcade.View):
@@ -26,8 +25,6 @@ class WelcomeView(arcade.View):
         self.player = player
 
         self.intro_player = intro_player
-
-        self.game_view = None
 
         # Find the title image in the images folder
         first_image_path = ASSETS_PATH / "images" / "all_is_calm.png"
@@ -54,6 +51,11 @@ class WelcomeView(arcade.View):
         # Start intro music
         intro_player.play()
 
+    def cleanup(self):
+        """Terminate spawned speech recogizer process"""
+        if self.recognize_proc:
+            self.recognize_proc.terminate()
+
     def on_update(self, delta_time: float) -> None:
         """Manages the timer to toggle the instructions
 
@@ -75,7 +77,7 @@ class WelcomeView(arcade.View):
 
         # If the timer has run out, we toggle the instructions
         if self.switch_screen_timer > 4:
-            self.start_view = start_view.StartView(self.player, self.intro_player)
+            self.start_view = StartView(self.player, self.intro_player)
             self.window.show_view(self.start_view)
 
     def on_draw(self) -> None:

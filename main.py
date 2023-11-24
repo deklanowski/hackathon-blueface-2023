@@ -19,10 +19,9 @@ from dotenv import load_dotenv
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
 from arcade_game.arcade_platformer.player.player import Player
-from arcade_game.arcade_platformer.view import welcome_view
-from log.config_log import logger
-
+from arcade_game.arcade_platformer.view.welcome_view import WelcomeView
 from arcade_game.arcade_platformer.view.media_player import MediaPlayer
+from log.config_log import logger
 
 if __name__ == "__main__":
 
@@ -43,13 +42,13 @@ if __name__ == "__main__":
 
     intro_player = MediaPlayer("2050-Neon-Skies.wav")
 
-    welcome_view = welcome_view.WelcomeView(global_player, intro_player)
+    welcome_view = WelcomeView(global_player, intro_player)
     window.show_view(welcome_view)
 
     arcade.run()
 
-    # Closes the speech processor when the game is closed
-    if welcome_view.game_view and welcome_view.game_view.recognize_proc:
-        welcome_view.game_view.recognize_proc.terminate()
+    # Closes the speech processor
+    if welcome_view:
+        welcome_view.cleanup()
 
     logger.info("Game over")

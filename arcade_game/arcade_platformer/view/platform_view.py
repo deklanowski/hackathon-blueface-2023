@@ -5,13 +5,12 @@ from timeit import default_timer
 
 import arcade
 
-from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, TOTAL_LIFE_COUNT, ASSETS_PATH, \
-    MAP_SCALING, PLAYER_START_X, PLAYER_START_Y, GRAVITY, LEFT_VIEWPORT_MARGIN, RIGHT_VIEWPORT_MARGIN, \
-    TOP_VIEWPORT_MARGIN, BOTTOM_VIEWPORT_MARGIN, PLAYER_MOVE_SPEED, PLAYER_JUMP_SPEED
+from arcade_game.arcade_platformer.config.config import *
 from arcade_game.arcade_platformer.player.player import Player
 from speech.speech_recognition import speech_to_text_continuous
 
-from . import game_over_view, winner_view
+from .game_over_view import GameOverView
+from .winner_view import WinnerView
 
 
 class PlatformerView(arcade.View):
@@ -184,19 +183,20 @@ class PlatformerView(arcade.View):
                 self.game_player.move_left()
             elif "stop" in command:
                 self.game_player.stop()
-
-            if "jump" in command:
-                self.game_player.jump()
+            elif "hold" in command:
+                self.game_player.hold()
+            elif "freeze" in command:
+                self.game_player.freeze()
             elif "up" in command:
                 self.game_player.move_up()
             elif "down" in command:
                 self.game_player.move_down()
-            elif "hold" in command:
-                self.game_player.hold()
+            elif "jump" in command:
+                self.game_player.jump()
             elif "wiggle" in command:
-                self.game_player.boggle()
+                self.game_player.wiggle()
             elif "boggle" in command:
-                self.game_player.shimmy_left()
+                self.game_player.boggle()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -410,7 +410,7 @@ class PlatformerView(arcade.View):
         Game Over !
         """
         # Show the Game Over Screen
-        _game_over_view = game_over_view.GameOverView(self.game_player)
+        _game_over_view = GameOverView(self.game_player)
         self.window.show_view(_game_over_view)
 
     def handle_victory(self):
@@ -418,7 +418,7 @@ class PlatformerView(arcade.View):
         Victory !
         """
         # Show the winner Screen
-        _winner_view = winner_view.WinnerView(self.game_player)
+        _winner_view = WinnerView(self.game_player)
         # Calculate final score
         _winner_view.score = self.calculate_score()
         self.window.show_view(_winner_view)

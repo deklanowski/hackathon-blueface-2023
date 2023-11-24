@@ -2,8 +2,8 @@ import arcade
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
 from arcade_game.arcade_platformer.player.player import Player
-# from arcade_game.arcade_platformer.view.cad import StartView
-from . import platform_view
+
+from .platform_view import PlatformerView
 from .media_player import MediaPlayer
 
 
@@ -67,7 +67,7 @@ class CadView(arcade.View):
             self.intro_player.stop()
 
             # Launch Game view
-            self.game_view = platform_view.PlatformerView(self.player)
+            self.game_view = PlatformerView(self.player)
             self.game_view.setup()
             self.window.show_view(self.game_view)
     
