@@ -8,7 +8,7 @@ from arcade_game.arcade_platformer.player.player import Player
 from . import start_view
 
 
-# from speech.speech_recognition import speech_to_text_startup
+from speech.speech_recognition import speech_to_text_startup
 
 class WelcomeView(arcade.View):
     """
