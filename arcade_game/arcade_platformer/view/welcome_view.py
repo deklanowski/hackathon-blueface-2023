@@ -1,10 +1,13 @@
-from multiprocessing import Process, Queue
-import time
-import arcade
 import os
+from multiprocessing import Process, Queue
+
+import arcade
+
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from . import start_view
 from arcade_game.arcade_platformer.player.player import Player
+from . import start_view
+
+
 # from speech.speech_recognition import speech_to_text_startup
 
 class WelcomeView(arcade.View):
@@ -18,6 +21,7 @@ class WelcomeView(arcade.View):
     def __init__(self, player: Player) -> None:
         super().__init__()
 
+        self.start_view = None
         self.player = player
 
         self.game_view = None
@@ -41,15 +45,14 @@ class WelcomeView(arcade.View):
 
         # Are we showing the instructions?
         self.show_instructions = False
-        
-        # Start the process for Speech Recognition
-        # self.message_queue = Queue()
-        # self.recognize_proc = Process(target=speech_to_text_startup, kwargs={
-        #     "message_queue": self.message_queue,
-        #     "api_key": os.environ.get('SPEECH_API_KEY'),
-        #     "speech_region": os.environ.get('SPEECH_REGION')}, name="Startup Speech")
-        # self.recognize_proc.start()
 
+        # Start the process for Speech Recognition
+        self.message_queue = Queue()
+        self.recognize_proc = Process(target=speech_to_text_startup, kwargs={
+             "message_queue": self.message_queue,
+             "api_key": os.environ.get('SPEECH_API_KEY'),
+             "speech_region": os.environ.get('SPEECH_REGION')}, name="Startup Speech")
+        self.recognize_proc.start()
 
     def on_update(self, delta_time: float) -> None:
         """Manages the timer to toggle the instructions
@@ -61,7 +64,7 @@ class WelcomeView(arcade.View):
         # First, count down the time
         self.display_timer -= delta_time
         self.switch_screen_timer += delta_time
-        
+
         # If the timer has run out, we toggle the instructions
         if self.display_timer < 0:
             # Toggle whether to show the instructions
@@ -87,6 +90,3 @@ class WelcomeView(arcade.View):
             height=SCREEN_HEIGHT,
             texture=self.first_image,
         )
-
-
-
