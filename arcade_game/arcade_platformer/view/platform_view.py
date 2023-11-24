@@ -169,10 +169,6 @@ class PlatformerView(arcade.View):
             "api_key": os.environ.get('SPEECH_API_KEY'),
             "speech_region": os.environ.get('SPEECH_REGION')}, name="T1")
         self.recognize_proc.start()
-        # Start voice command processing
-        command_thread = threading.Thread(target=self.execute_voice_command,
-                                          args=())
-        command_thread.start()
 
     def execute_voice_command(self):
         """
@@ -182,21 +178,22 @@ class PlatformerView(arcade.View):
             command = self.message_queue.get()
             print(f"COMMAND: {command}")
 
+            
             if "right" in command:
                 self.game_player.move_right()
             elif "left" in command:
                 self.game_player.move_left()
-            elif "up" in command:
-                # Check if player can climb up or down
-                if self.physics_engine.is_on_ladder():
-                    self.game_player.move_up()
-            elif "down" in command:
-                if self.physics_engine.is_on_ladder():
-                    self.game_player.move_down()
-            elif "jump" in command:
-                self.game_player.jump()
             elif "stop" in command:
                 self.game_player.stop()
+                
+            if "jump" in command:
+                self.game_player.jump()
+            elif "up" in command:
+                self.game_player.move_up()
+            elif "down" in command:
+                self.game_player.move_down()
+            elif "hold" in command:
+                self.game_player.hold()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -344,14 +341,12 @@ class PlatformerView(arcade.View):
         Arguments:
             delta_time {float} -- How much time since the last call
         """
-        self.execute_voice_command()
-
         # Update the player animation
         self.player.update_animation(delta_time)
 
         # Update player movement based on the physics engine
         self.physics_engine.update()
-
+                
         # Restrict user movement so they can't walk off-screen
         if self.player.left < 0:
             self.player.left = 0
@@ -404,6 +399,8 @@ class PlatformerView(arcade.View):
         else:
             # Set the viewport, scrolling if necessary
             self.scroll_viewport()
+            
+        self.execute_voice_command()
 
     def handle_game_over(self):
         """

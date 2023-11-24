@@ -53,6 +53,6 @@ class StartView(arcade.View):
         self.switch_screen_timer += delta_time
 
         # If the timer has run out, we toggle the instructions
-        if self.switch_screen_timer > 4:
+        if self.switch_screen_timer > 1:
             self.objective_view = objective_view.ObjectiveView(self.player)
             self.window.show_view(self.objective_view)

@@ -31,6 +31,7 @@ if __name__ == "__main__":
     global_player: Player = Player()
 
     welcome_view = welcome_view.WelcomeView(global_player)
+    welcome_view.start_sound()
     window.show_view(welcome_view)
  
     arcade.run()

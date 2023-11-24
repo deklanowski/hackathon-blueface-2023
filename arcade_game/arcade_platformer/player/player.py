@@ -30,13 +30,20 @@ class Player:
 
         # Set up the appropriate textures
         walking_paths = [
-            texture_path / f"alienGreen_walk{x}.png" for x in (1, 2)
+            texture_path / f"timrun{x}.png" for x in (1, 2, 3)
+        ]
+        jump_paths = [
+            texture_path / f"PC Computer - Braid - Tim climb{x}.png" for x in (1, 2, 3, 4)
         ]
         climbing_paths = [
-            texture_path / f"alienGreen_climb{x}.png" for x in (1, 2)
+            texture_path / f"PC Computer - Braid - Tim climb{x}.png" for x in (1, 2, 3, 4)
         ]
-        standing_path = texture_path / "alienGreen_stand.png"
-
+        standing_path = [ 
+            texture_path / f"PC Computer - Braid - Tim stand{x}.png" for x in (1, 2, 3, 4, 5, 6, 7)
+        ]
+        attack_path = [ 
+            texture_path / f"PC Computer - Braid - Tim phone{x}-overlay.png" for x in (1, 2, 3)
+        ]
         # Load them all now
         walking_right_textures = [
             arcade.load_texture(texture) for texture in walking_paths
@@ -53,10 +60,22 @@ class Player:
             arcade.load_texture(texture) for texture in climbing_paths
         ]
 
-        standing_right_textures = [arcade.load_texture(standing_path)]
+        standing_right_textures = [
+            arcade.load_texture(texture) for texture in standing_path
+        ]
 
         standing_left_textures = [
-            arcade.load_texture(standing_path, mirrored=True)
+            arcade.load_texture(texture, mirrored=True)
+            for texture in standing_path
+        ]
+        
+        attack_right_textures = [
+            arcade.load_texture(texture) for texture in attack_path
+        ]
+
+        attack_left_textures = [
+            arcade.load_texture(texture, mirrored=True)
+            for texture in attack_path
         ]
 
         # Create the sprite
@@ -69,6 +88,8 @@ class Player:
         player.walk_right_textures = walking_right_textures
         player.walk_up_textures = walking_up_textures
         player.walk_down_textures = walking_down_textures
+        player.attack_left_textures = attack_left_textures
+        player.attack_right_textures = attack_right_textures
 
         # Set the player defaults
         player.center_x = PLAYER_START_X
@@ -91,16 +112,21 @@ class Player:
     def move_up(self):
         # Check if player can climb up or down
         if self.physics_engine.is_on_ladder():
+            self.player.change_x = 0
             #self.player.change_x = 0  # stop horizontal movement?
             self.player.change_y = PLAYER_MOVE_SPEED
             
 
     def move_down(self):
         if self.physics_engine.is_on_ladder():
+            self.player.change_x = 0
             self.player.change_y = -PLAYER_MOVE_SPEED
 
     def stop(self):
         self.player.change_x = 0
+        
+    def hold(self):
+        self.player.change_y = 0
 
     def jump(self):
         if self.physics_engine.can_jump():
