@@ -1,5 +1,4 @@
 import os
-import threading
 from multiprocessing import Process, Queue
 from time import sleep
 from timeit import default_timer
@@ -11,6 +10,7 @@ from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEI
     TOP_VIEWPORT_MARGIN, BOTTOM_VIEWPORT_MARGIN, PLAYER_MOVE_SPEED, PLAYER_JUMP_SPEED
 from arcade_game.arcade_platformer.player.player import Player
 from speech.speech_recognition import speech_to_text_continuous
+
 from . import game_over_view, winner_view
 
 
@@ -178,14 +178,13 @@ class PlatformerView(arcade.View):
             command = self.message_queue.get()
             print(f"COMMAND: {command}")
 
-            
             if "right" in command:
                 self.game_player.move_right()
             elif "left" in command:
                 self.game_player.move_left()
             elif "stop" in command:
                 self.game_player.stop()
-                
+
             if "jump" in command:
                 self.game_player.jump()
             elif "up" in command:
@@ -194,6 +193,10 @@ class PlatformerView(arcade.View):
                 self.game_player.move_down()
             elif "hold" in command:
                 self.game_player.hold()
+            elif "wiggle" in command:
+                self.game_player.boggle()
+            elif "boggle" in command:
+                self.game_player.shimmy_left()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -346,7 +349,7 @@ class PlatformerView(arcade.View):
 
         # Update player movement based on the physics engine
         self.physics_engine.update()
-                
+
         # Restrict user movement so they can't walk off-screen
         if self.player.left < 0:
             self.player.left = 0
@@ -399,7 +402,7 @@ class PlatformerView(arcade.View):
         else:
             # Set the viewport, scrolling if necessary
             self.scroll_viewport()
-            
+
         self.execute_voice_command()
 
     def handle_game_over(self):

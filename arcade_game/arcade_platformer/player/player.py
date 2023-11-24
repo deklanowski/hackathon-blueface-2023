@@ -8,6 +8,7 @@ class Player:
     """
     Controls the player animations (images for the various positions) and movements
     """
+
     def __init__(self):
         self.player = self.create_player_sprite()
         self.physics_engine = None
@@ -38,10 +39,10 @@ class Player:
         climbing_paths = [
             texture_path / f"PC Computer - Braid - Tim climb{x}.png" for x in (1, 2, 3, 4)
         ]
-        standing_path = [ 
+        standing_path = [
             texture_path / f"PC Computer - Braid - Tim stand{x}.png" for x in (1, 2, 3, 4, 5, 6, 7)
         ]
-        attack_path = [ 
+        attack_path = [
             texture_path / f"PC Computer - Braid - Tim phone{x}-overlay.png" for x in (1, 2, 3)
         ]
         # Load them all now
@@ -68,7 +69,7 @@ class Player:
             arcade.load_texture(texture, mirrored=True)
             for texture in standing_path
         ]
-        
+
         attack_right_textures = [
             arcade.load_texture(texture) for texture in attack_path
         ]
@@ -103,19 +104,15 @@ class Player:
 
     def move_left(self):
         self.player.change_x = -PLAYER_MOVE_SPEED
-        
 
     def move_right(self):
         self.player.change_x = PLAYER_MOVE_SPEED
-        
 
     def move_up(self):
         # Check if player can climb up or down
         if self.physics_engine.is_on_ladder():
-            self.player.change_x = 0
-            #self.player.change_x = 0  # stop horizontal movement?
+            self.player.change_x = 0  # have to stop before climbing
             self.player.change_y = PLAYER_MOVE_SPEED
-            
 
     def move_down(self):
         if self.physics_engine.is_on_ladder():
@@ -124,12 +121,26 @@ class Player:
 
     def stop(self):
         self.player.change_x = 0
-        
+
     def hold(self):
         self.player.change_y = 0
 
     def jump(self):
         if self.physics_engine.can_jump():
             self.player.change_y = PLAYER_JUMP_SPEED
+            # Play the jump sound
+            arcade.play_sound(self.jump_sound)
+
+    def wiggle(self):
+        if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
+            self.player.change_y = PLAYER_JUMP_SPEED
+            self.player.change_x = PLAYER_MOVE_SPEED
+            # Play the jump sound
+            arcade.play_sound(self.jump_sound)
+
+    def boggle(self):
+        if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
+            self.player.change_y = PLAYER_JUMP_SPEED
+            self.player.change_x = -PLAYER_MOVE_SPEED
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
