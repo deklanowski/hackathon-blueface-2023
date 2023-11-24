@@ -428,7 +428,7 @@ class PlatformerView(arcade.View):
         Draw the score in the lower left
         """
         # Find the coin image in the images folder
-        score_image_path = ASSETS_PATH / "images" / "items" / "coinGold.png"
+        score_image_path = ASSETS_PATH / "images" / "items" / "polyphonebox.png"
 
         # Load our score image
         score_image = arcade.load_texture(score_image_path)
