@@ -1,13 +1,10 @@
-from multiprocessing import Process, Queue
-import time
 import arcade
-import os
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from . import start_view
-from . import cad_view
 from arcade_game.arcade_platformer.player.player import Player
-# from speech.speech_recognition import speech_to_text_startup
+from . import cad_view
+from .media_player import MediaPlayer
+
 
 class ObjectiveView(arcade.View):
     """
@@ -17,19 +14,22 @@ class ObjectiveView(arcade.View):
     You do not have to modify these to complete the mandatory challenges.
     """
 
-    def __init__(self, player: Player) -> None:
+    def __init__(self, player: Player, intro_player: MediaPlayer) -> None:
         super().__init__()
 
+        self.start_view = None
         self.player = player
 
+        self.intro_player = intro_player
+
         self.game_view = None
-        
+
         # Find the title image in the images folder
         second_image_path = ASSETS_PATH / "images" / "objective.png"
 
         # Load our title image
         self.second_image = arcade.load_texture(second_image_path)
-        
+
         self.switch_screen_timer = 0.0
         # self.update_background_image(self.first_image)
 
@@ -45,7 +45,7 @@ class ObjectiveView(arcade.View):
             height=SCREEN_HEIGHT,
             texture=self.second_image,
         )
-    
+
     def on_update(self, delta_time: float) -> None:
         """Manages the timer to toggle the instructions
 
@@ -56,5 +56,5 @@ class ObjectiveView(arcade.View):
 
         # If the timer has run out, we toggle the instructions
         if self.switch_screen_timer > 1:
-            self.start_view = cad_view.CadView(self.player)
+            self.start_view = cad_view.CadView(self.player, self.intro_player)
             self.window.show_view(self.start_view)

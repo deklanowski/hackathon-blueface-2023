@@ -11,6 +11,8 @@ from arcade_game.arcade_platformer.player.player import Player
 from arcade_game.arcade_platformer.view import welcome_view
 from log.config_log import logger
 
+from arcade_game.arcade_platformer.view.media_player import MediaPlayer
+
 # from speech.speech_recognition import speech_to_text_startup
 
 if __name__ == "__main__":
@@ -30,8 +32,10 @@ if __name__ == "__main__":
 
     global_player: Player = Player()
 
-    welcome_view = welcome_view.WelcomeView(global_player)
-    welcome_view.start_sound()
+
+    intro_player = MediaPlayer("2050-Neon-Skies.wav")
+
+    welcome_view = welcome_view.WelcomeView(global_player, intro_player)
     window.show_view(welcome_view)
  
     arcade.run()
