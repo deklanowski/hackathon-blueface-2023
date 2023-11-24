@@ -95,6 +95,9 @@ class Player:
         if self.physics_engine.is_on_ladder():
             self.player.change_y = -PLAYER_MOVE_SPEED
 
+    def stop(self):
+        self.player.change_x = 0
+
     def jump(self):
         if self.physics_engine.can_jump():
             self.player.change_y = PLAYER_JUMP_SPEED

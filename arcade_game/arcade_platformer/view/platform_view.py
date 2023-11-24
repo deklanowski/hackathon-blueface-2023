@@ -176,24 +176,25 @@ class PlatformerView(arcade.View):
         """
         Processes voice command queue and executes matched commands.
         """
-        while True:
-            if not self.message_queue.empty():
-                command = self.message_queue.get()
-                print(f"COMMAND: {command}")
+        if not self.message_queue.empty():
+            command = self.message_queue.get()
+            print(f"COMMAND: {command}")
 
-                if "right" in command:
-                    self.game_player.move_right()
-                elif "left" in command:
-                    self.game_player.move_left()
-                elif "up" in command:
+            if "right" in command:
+                self.game_player.move_right()
+            elif "left" in command:
+                self.game_player.move_left()
+            elif "up" in command:
+                # Check if player can climb up or down
+                if self.physics_engine.is_on_ladder():
                     self.game_player.move_up()
-                elif "down" in command:
+            elif "down" in command:
+                if self.physics_engine.is_on_ladder():
                     self.game_player.move_down()
-                elif "jump" in command:
-                    self.game_player.jump()
-            else:
-                # avoid busy-waiting
-                time.sleep(0.5)
+            elif "jump" in command:
+                self.game_player.jump()
+            elif "stop" in command:
+                self.game_player.stop()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -341,6 +342,8 @@ class PlatformerView(arcade.View):
         Arguments:
             delta_time {float} -- How much time since the last call
         """
+
+        self.execute_voice_command()
 
         # Update the player animation
         self.player.update_animation(delta_time)
