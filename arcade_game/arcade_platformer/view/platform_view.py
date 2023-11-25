@@ -1,4 +1,5 @@
 import os
+import time
 from multiprocessing import Process, Queue
 from time import sleep
 from timeit import default_timer
@@ -159,6 +160,9 @@ class PlatformerView(arcade.View):
             gravity_constant=GRAVITY,
             ladders=self.ladders,
         )
+
+        self.physics_engine.enable_multi_jump(2)
+
         self.game_player.set_physics_engine(self.physics_engine)
 
         # Start the process for Speech Recognition
@@ -174,29 +178,42 @@ class PlatformerView(arcade.View):
         Processes voice command queue and executes matched commands.
         """
         if not self.message_queue.empty():
-            command = self.message_queue.get()
-            print(f"COMMAND: {command}")
-
-            if "right" in command:
-                self.game_player.move_right()
-            elif "left" in command:
-                self.game_player.move_left()
-            elif "stop" in command:
-                self.game_player.stop()
-            elif "hold" in command:
-                self.game_player.hold()
-            elif "freeze" in command:
-                self.game_player.freeze()
-            elif "up" in command:
-                self.game_player.move_up()
-            elif "down" in command:
-                self.game_player.move_down()
-            elif "jump" in command:
-                self.game_player.jump()
-            elif "wiggle" in command:
-                self.game_player.wiggle()
-            elif "boggle" in command:
-                self.game_player.boggle()
+            commands = self.message_queue.get().split()
+            print(f"COMMANDS: {commands}")
+            for command in commands:
+                print(f"Executing: {command}")
+                if "right" in command:
+                    self.game_player.move_right()
+                elif "left" in command:
+                    self.game_player.move_left()
+                elif "nibble" in command:
+                    self.game_player.nudge_right(nudge_seconds=0.5)
+                elif "nobble" in command or "noble" in command:
+                    self.game_player.nudge_right()
+                elif "kibble" in command:
+                    self.game_player.nudge_left(nudge_seconds=0.5)
+                elif "kobble" in command or "cobble" in command:
+                    self.game_player.nudge_left()
+                elif "stop" in command:
+                    self.game_player.stop()
+                elif "hold" in command:
+                    self.game_player.hold()
+                elif "up" in command:
+                    self.game_player.move_up()
+                elif "down" in command:
+                    self.game_player.move_down()
+                elif "jump" in command:
+                    self.game_player.jump()
+                elif "wiggle" in command:
+                    self.game_player.wiggle()
+                elif "boggle" in command:
+                    self.game_player.boggle()
+                elif "jiggle" in command:
+                    self.game_player.jiggle()
+                elif "turbo" in command:
+                    self.game_player.turbo()
+                elif "joggle" in command:
+                    self.game_player.joggle()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -308,7 +325,7 @@ class PlatformerView(arcade.View):
         # Check if player can jump
         elif key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
-                self.player.change_y = PLAYER_JUMP_SPEED
+                self.physics_engine.jump(PLAYER_JUMP_SPEED)
                 # Play the jump sound
                 arcade.play_sound(self.jump_sound)
 

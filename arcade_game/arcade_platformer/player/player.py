@@ -10,6 +10,7 @@ class Player:
     """
 
     def __init__(self):
+        self.movement_timer = None
         self.player = self.create_player_sprite()
         self.physics_engine = None
         self.jump_sound = arcade.load_sound(
@@ -108,6 +109,16 @@ class Player:
     def move_right(self):
         self.player.change_x = PLAYER_MOVE_SPEED
 
+    def nudge_right(self, nudge_seconds=2):
+        """Move right for nudge_seconds then stop"""
+        self.move_right()
+        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+
+    def nudge_left(self, nudge_seconds=2):
+        """Move left for nudge_seconds then stop"""
+        self.move_left()
+        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+
     def move_up(self):
         # Check if player can climb up or down
         if self.physics_engine.is_on_ladder():
@@ -120,31 +131,54 @@ class Player:
             self.player.change_y = -PLAYER_MOVE_SPEED
 
     def stop(self):
+        """Stop horizontal motion"""
         self.player.change_x = 0
 
     def hold(self):
+        """Stop upward motion"""
         self.player.change_y = 0
-
-    def freeze(self):
-        self.player.change_x = self.player.change_y = 0
 
     def jump(self):
         if self.physics_engine.can_jump():
-            self.player.change_y = PLAYER_JUMP_SPEED
+            self.physics_engine.jump(PLAYER_JUMP_SPEED)
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
-    def wiggle(self):
+    def wiggle(self, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
+        """Allows player to jump up and move right when on platform or ladder"""
         if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
-            self.player.change_y = PLAYER_JUMP_SPEED
-            self.player.change_x = PLAYER_MOVE_SPEED
+            self.physics_engine.jump(jump_speed)
+            self.player.change_x = move_speed
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
     def boggle(self):
+        """Allows player to jump up and move left when on platform or ladder"""
         if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
-            self.player.change_y = PLAYER_JUMP_SPEED
+            self.physics_engine.jump(PLAYER_JUMP_SPEED)
             self.player.change_x = -PLAYER_MOVE_SPEED
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
+
+    def jiggle(self, nudge_seconds=2, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
+        """Allows player to 'wiggle' for nudge seconds, then stop dead"""
+        self.wiggle(jump_speed=jump_speed, move_speed=move_speed)
+        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+
+    def turbo(self):
+        """Help us get over the wide water jump on level 4"""
+        self.jiggle(jump_speed=PLAYER_JUMP_SPEED + 2, move_speed=PLAYER_MOVE_SPEED + 2)
+
+    def joggle(self, nudge_seconds=2):
+        """Allows player to 'boggle' for nudge seconds, then stop dead"""
+        self.boggle()
+        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+
+    def reset_movement(self, delta_time):
+        """This function is called from the scheduler to stop player movement"""
+        self.player.change_x = 0
+        self.player.change_y = 0
+        arcade.unschedule(self.reset_movement)
+        self.movement_timer = None
+
 
