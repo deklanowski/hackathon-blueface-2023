@@ -1,10 +1,8 @@
 import arcade
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from arcade_game.arcade_platformer.player.player import Player
-
-from .platform_view import PlatformerView
 from .media_player import MediaPlayer
+from .platform_view import PlatformerView
 
 
 class CadView(arcade.View):
@@ -14,12 +12,10 @@ class CadView(arcade.View):
     Displays a background image, play a sounds and wait for pressing the Enter key to start the game.
     You do not have to modify these to complete the mandatory challenges.
     """ 
-    def __init__(self, player: Player, intro_player: MediaPlayer) -> None:
+    def __init__(self, intro_media_player: MediaPlayer) -> None:
         super().__init__()
 
-        self.player = player
-
-        self.intro_player = intro_player
+        self.intro_media_player = intro_media_player
 
         self.game_view = None
 
@@ -64,10 +60,10 @@ class CadView(arcade.View):
         """
         if key == arcade.key.RETURN:
             # Stop intro music
-            self.intro_player.stop()
+            self.intro_media_player.stop()
 
             # Launch Game view
-            self.game_view = PlatformerView(self.player)
+            self.game_view = PlatformerView()
             self.game_view.setup()
             self.window.show_view(self.game_view)
     

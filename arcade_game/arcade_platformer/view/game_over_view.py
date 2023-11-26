@@ -96,6 +96,6 @@ class GameOverView(arcade.View):
             self.game_over_sound.stop(self.sound_player)
 
             # Re-launch the game
-            game_view = platform_view.PlatformerView(self.player)
+            game_view = platform_view.PlatformerView()
             game_view.setup()
             self.window.show_view(game_view)

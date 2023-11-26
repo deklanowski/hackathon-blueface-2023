@@ -1,10 +1,8 @@
 import arcade
 
-
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from arcade_game.arcade_platformer.player.player import Player
-from .objective_view import ObjectiveView
 from .media_player import MediaPlayer
+from .objective_view import ObjectiveView
 
 
 class StartView(arcade.View):
@@ -15,12 +13,10 @@ class StartView(arcade.View):
     You do not have to modify these to complete the mandatory challenges.
     """
 
-    def __init__(self, player: Player, intro_player: MediaPlayer) -> None:
+    def __init__(self, intro_media_player: MediaPlayer) -> None:
         super().__init__()
 
-        self.player = player
-
-        self.intro_player = intro_player
+        self.intro_media_player = intro_media_player
 
         self.objective_view = None
 
@@ -58,5 +54,5 @@ class StartView(arcade.View):
 
         # If the timer has run out, we toggle the instructions
         if self.switch_screen_timer > 1:
-            self.objective_view = ObjectiveView(self.player, self.intro_player)
+            self.objective_view = ObjectiveView(self.intro_media_player)
             self.window.show_view(self.objective_view)

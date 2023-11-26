@@ -1,8 +1,6 @@
 import arcade
 
-
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, ASSETS_PATH
-from arcade_game.arcade_platformer.player.player import Player
 from . import platform_view
 
 
@@ -14,10 +12,8 @@ class WinnerView(arcade.View):
     You do not have to modify these to complete the mandatory challenges.
     """
 
-    def __init__(self, player: Player) -> None:
+    def __init__(self) -> None:
         super().__init__()
-
-        self.player = player
 
         # Load and play victory music
         self.victory_sound = arcade.load_sound(
@@ -112,6 +108,6 @@ class WinnerView(arcade.View):
             self.victory_sound.stop(self.sound_player)
 
             # Re-launch the game
-            game_view = platform_view.PlatformerView(self.player)
+            game_view = platform_view.PlatformerView()
             game_view.setup()
             self.window.show_view(game_view)

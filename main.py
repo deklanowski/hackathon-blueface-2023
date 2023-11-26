@@ -18,9 +18,8 @@ import arcade
 from dotenv import load_dotenv
 
 from arcade_game.arcade_platformer.config.config import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE
-from arcade_game.arcade_platformer.player.player import Player
-from arcade_game.arcade_platformer.view.welcome_view import WelcomeView
 from arcade_game.arcade_platformer.view.media_player import MediaPlayer
+from arcade_game.arcade_platformer.view.welcome_view import WelcomeView
 from log.config_log import logger
 
 if __name__ == "__main__":
@@ -38,11 +37,9 @@ if __name__ == "__main__":
         width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title=SCREEN_TITLE
     )
 
-    global_player: Player = Player()
+    intro_media_player = MediaPlayer("2050-Neon-Skies.wav")
 
-    intro_player = MediaPlayer("2050-Neon-Skies.wav")
-
-    welcome_view = WelcomeView(global_player, intro_player)
+    welcome_view = WelcomeView(intro_media_player)
     window.show_view(welcome_view)
 
     arcade.run()

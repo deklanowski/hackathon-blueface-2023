@@ -144,7 +144,7 @@ class Player:
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
-    def wiggle(self, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
+    def jump_right(self, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
         """Allows player to jump up and move right when on platform or ladder"""
         if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
             self.physics_engine.jump(jump_speed)
@@ -152,7 +152,7 @@ class Player:
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
-    def boggle(self):
+    def jump_left(self):
         """Allows player to jump up and move left when on platform or ladder"""
         if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
             self.physics_engine.jump(PLAYER_JUMP_SPEED)
@@ -160,22 +160,25 @@ class Player:
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
-    def jiggle(self, nudge_seconds=2, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
-        """Allows player to 'wiggle' for nudge seconds, then stop dead"""
-        self.wiggle(jump_speed=jump_speed, move_speed=move_speed)
-        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+    def jump_right_timed(self, interval_seconds=2, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
+        """Allows player to 'jump_right' for a specified interval then stop dead"""
+        self.jump_right(jump_speed=jump_speed, move_speed=move_speed)
+        self.movement_timer = arcade.schedule(self.reset_movement, interval_seconds)
 
-    def turbo(self):
+    def jump_right_turbo(self, jump_speed=PLAYER_JUMP_SPEED + 2, move_speed=PLAYER_MOVE_SPEED + 3):
         """Help us get over the wide water jump on level 4"""
-        self.jiggle(jump_speed=PLAYER_JUMP_SPEED + 2, move_speed=PLAYER_MOVE_SPEED + 2)
+        self.jump_right_timed(jump_speed=jump_speed, move_speed=move_speed)
 
-    def joggle(self, nudge_seconds=2):
-        """Allows player to 'boggle' for nudge seconds, then stop dead"""
-        self.boggle()
-        self.movement_timer = arcade.schedule(self.reset_movement, nudge_seconds)
+    def jump_left_timed(self, interval_seconds=2):
+        """Allows player to 'jump_left' for a specified interval then stop dead"""
+        self.jump_left()
+        self.movement_timer = arcade.schedule(self.reset_movement, interval_seconds)
 
     def reset_movement(self, delta_time):
-        """This function is called from the scheduler to stop player movement"""
+        """
+        This function is called from the scheduler to stop player movement. It is used in the
+        timed movement functions, e.g. jump_right_timed.
+        """
         self.player.change_x = 0
         self.player.change_y = 0
         arcade.unschedule(self.reset_movement)

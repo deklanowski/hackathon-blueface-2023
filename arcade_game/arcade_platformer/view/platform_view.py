@@ -1,5 +1,4 @@
 import os
-import time
 from multiprocessing import Process, Queue
 from time import sleep
 from timeit import default_timer
@@ -9,7 +8,6 @@ import arcade
 from arcade_game.arcade_platformer.config.config import *
 from arcade_game.arcade_platformer.player.player import Player
 from speech.speech_recognition import speech_to_text_continuous
-
 from .game_over_view import GameOverView
 from .winner_view import WinnerView
 
@@ -19,11 +17,9 @@ class PlatformerView(arcade.View):
     Displays the platform game view, where you can interact with the player
     """
 
-    def __init__(self, player: Player) -> None:
+    def __init__(self) -> None:
         """The init method runs only once when the game starts"""
         super().__init__()
-
-        self.game_player = player
 
         # These lists will hold different sets of sprites
         self.coins = None
@@ -36,7 +32,9 @@ class PlatformerView(arcade.View):
         # Avoids leaving the mouse pointer in the middle
         self.window.set_mouse_visible(False)
 
-        # One sprite for the player, no more is needed
+        # Create the player sprite
+        self.game_player = Player()
+        # local reference to the player sprite
         self.player = self.game_player.player
 
         # We need a physics engine as well
@@ -161,6 +159,7 @@ class PlatformerView(arcade.View):
             ladders=self.ladders,
         )
 
+        # Allow the player to double-jump (dcox)
         self.physics_engine.enable_multi_jump(2)
 
         self.game_player.set_physics_engine(self.physics_engine)
@@ -181,18 +180,20 @@ class PlatformerView(arcade.View):
             commands = self.message_queue.get().split()
             print(f"COMMANDS: {commands}")
             for command in commands:
-                print(f"Executing: {command}")
+                print(f"Executing: {command}", flush=True)
                 if "right" in command:
                     self.game_player.move_right()
                 elif "left" in command:
                     self.game_player.move_left()
                 elif "nibble" in command:
                     self.game_player.nudge_right(nudge_seconds=0.5)
-                elif "nobble" in command or "noble" in command:
+                elif "nibbles" in command:
                     self.game_player.nudge_right()
-                elif "kibble" in command:
+                elif "kibbles" in command:
+                    self.game_player.nudge_right(nudge_seconds=3)
+                elif "bubble" in command:
                     self.game_player.nudge_left(nudge_seconds=0.5)
-                elif "kobble" in command or "cobble" in command:
+                elif "bubbles" in command:
                     self.game_player.nudge_left()
                 elif "stop" in command:
                     self.game_player.stop()
@@ -205,15 +206,18 @@ class PlatformerView(arcade.View):
                 elif "jump" in command:
                     self.game_player.jump()
                 elif "wiggle" in command:
-                    self.game_player.wiggle()
+                    self.game_player.jump_right()
                 elif "boggle" in command:
-                    self.game_player.boggle()
+                    self.game_player.jump_left()
                 elif "jiggle" in command:
-                    self.game_player.jiggle()
+                    self.game_player.jump_right_timed()
                 elif "turbo" in command:
-                    self.game_player.turbo()
+                    self.game_player.jump_right_turbo()
+                elif "blast" in command:
+                    self.game_player.jump_right_turbo(jump_speed=PLAYER_JUMP_SPEED + 3,
+                                                      move_speed=PLAYER_MOVE_SPEED + 3)
                 elif "joggle" in command:
-                    self.game_player.joggle()
+                    self.game_player.jump_left_timed()
 
     def get_game_time(self) -> int:
         """Returns the number of seconds since the game was initialised"""
@@ -435,7 +439,7 @@ class PlatformerView(arcade.View):
         Victory !
         """
         # Show the winner Screen
-        _winner_view = WinnerView(self.game_player)
+        _winner_view = WinnerView()
         # Calculate final score
         _winner_view.score = self.calculate_score()
         self.window.show_view(_winner_view)
