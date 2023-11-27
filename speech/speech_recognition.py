@@ -1,6 +1,6 @@
 import time
 import azure.cognitiveservices.speech as speechsdk
-from azure.cognitiveservices.speech import SpeechRecognitionEventArgs
+from azure.cognitiveservices.speech import SpeechRecognitionEventArgs, PropertyId
 from multiprocessing import Queue
 
 from log.config_log import logger
@@ -43,11 +43,19 @@ def speech_to_text_continuous(message_queue: Queue, api_key: str, speech_region:
 
     # Init engine
     speech_config = speechsdk.SpeechConfig(subscription=api_key, region=speech_region)
+    speech_config.speech_recognition_language = "en-GB"
+    # Initial Silence Timeout: The amount of silence at the beginning of a recognition
+    # before the Speech Service stops recognizing speech.
+
+    # I think this is set to around 15 seconds by default, setting it to 5 seconds speeds up the recognition
+    # process and makes the player more responsive to voice commands.
+    speech_config.set_property(PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs, "5000")
+
     audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
 
     # Define Callbacks
-    #speech_recognizer.recognizing.connect(lambda evt: logger.info(f'RECOGNIZING: {evt.result.text}'))
+    speech_recognizer.recognizing.connect(lambda evt: logger.info(f'RECOGNIZING: {evt.result.text}'))
     speech_recognizer.recognized.connect(recognized_speech)
 
     speech_recognizer.session_started.connect(lambda evt: logger.info(f'SESSION STARTED: {evt}'))
