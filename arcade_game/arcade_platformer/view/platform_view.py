@@ -194,7 +194,7 @@ class PlatformerView(arcade.View):
                 elif "bubble" in command:
                     self.game_player.nudge_left(nudge_seconds=0.5)
                 elif "bubbles" in command:
-                    self.game_player.nudge_left(nudge_seconds=3)
+                    self.game_player.nudge_left(nudge_seconds=4)
                 elif "stop" in command:
                     self.game_player.stop()
                 elif "hold" in command:

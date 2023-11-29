@@ -144,7 +144,7 @@ class Player:
             # Play the jump sound
             arcade.play_sound(self.jump_sound)
 
-    def jump_right(self, jump_speed=PLAYER_JUMP_SPEED, move_speed=PLAYER_MOVE_SPEED):
+    def jump_right(self, jump_speed=PLAYER_JUMP_SPEED+1, move_speed=PLAYER_MOVE_SPEED):
         """Allows player to jump up and move right when on platform or ladder"""
         if self.physics_engine.can_jump() or self.physics_engine.is_on_ladder():
             self.physics_engine.jump(jump_speed)
