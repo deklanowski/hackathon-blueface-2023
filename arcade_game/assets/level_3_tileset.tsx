@@ -56,7 +56,7 @@
   <image width="128" height="128" source="images/ground/Grass/grassRight.png"/>
  </tile>
  <tile id="18">
-  <image width="128" height="128" source="images/tiles/boxCrate_double.png"/>
+  <image width="128" height="128" source="images/tiles/office-desk.png"/>
  </tile>
  <tile id="19">
   <image width="128" height="128" source="images/tiles/bush.png"/>
@@ -107,13 +107,13 @@
   <image width="128" height="128" source="images/tiles/torch1.png"/>
  </tile>
  <tile id="35">
-  <image width="128" height="128" source="images/items/coinBronze.png"/>
+  <image width="128" height="128" source="images/items/polybox.png"/>
  </tile>
  <tile id="36">
-  <image width="128" height="128" source="images/items/coinGold.png"/>
+  <image width="128" height="128" source="images/items/polyphonebox.png"/>
  </tile>
  <tile id="37">
-  <image width="128" height="128" source="images/items/coinSilver.png"/>
+  <image width="128" height="128" source="images/items/polyheadset.png"/>
  </tile>
  <tile id="38">
   <image width="128" height="128" source="images/items/flagBlue1.png"/>

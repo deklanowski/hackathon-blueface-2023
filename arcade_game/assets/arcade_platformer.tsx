@@ -105,19 +105,19 @@
   <properties>
    <property name="point_value" type="int" value="5"/>
   </properties>
-  <image width="128" height="128" source="images/items/coinBronze.png"/>
+  <image width="128" height="128" source="images/items/polyBox.png"/>
  </tile>
  <tile id="55">
   <properties>
    <property name="point_value" type="int" value="20"/>
   </properties>
-  <image width="128" height="128" source="images/items/coinGold.png"/>
+  <image width="128" height="128" source="images/items/polyphonebox.png"/>
  </tile>
  <tile id="56">
   <properties>
    <property name="point_value" type="int" value="10"/>
   </properties>
-  <image width="128" height="128" source="images/items/coinSilver.png"/>
+  <image width="128" height="128" source="images/items/polyheadset.png"/>
  </tile>
  <tile id="60">
   <image width="128" height="128" source="images/items/flagGreen_down.png"/>
@@ -148,7 +148,7 @@
   <image width="128" height="128" source="images/items/star.png"/>
  </tile>
  <tile id="84">
-  <image width="128" height="128" source="images/tiles/boxCrate_double.png"/>
+  <image width="128" height="128" source="images/tiles/office-desk.png"/>
  </tile>
  <tile id="95">
   <image width="128" height="128" source="images/tiles/brickBrown.png"/>
