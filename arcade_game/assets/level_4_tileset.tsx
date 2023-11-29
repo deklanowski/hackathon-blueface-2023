@@ -59,13 +59,13 @@
   <image width="66" height="92" source="images/items/alienPink.png"/>
  </tile>
  <tile id="19">
-  <image width="128" height="128" source="images/items/coinBronze.png"/>
+  <image width="128" height="128" source="images/items/polybox.png"/>
  </tile>
  <tile id="20">
-  <image width="128" height="128" source="images/items/coinGold.png"/>
+  <image width="128" height="128" source="images/items/polyphonebox.png"/>
  </tile>
  <tile id="21">
-  <image width="128" height="128" source="images/items/coinSilver.png"/>
+  <image width="128" height="128" source="images/items/polyheadset.png"/>
  </tile>
  <tile id="22">
   <image width="128" height="128" source="images/items/flagYellow1.png"/>
@@ -74,7 +74,7 @@
   <image width="128" height="128" source="images/items/flagGreen1.png"/>
  </tile>
  <tile id="24">
-  <image width="128" height="128" source="images/tiles/boxCrate_double.png"/>
+  <image width="149" height="128" source="images/tiles/office-desk.png"/>
  </tile>
  <tile id="25">
   <image width="128" height="128" source="images/tiles/bridgeA.png"/>
